@@ -10,13 +10,15 @@ from tokenizer import Tokenizer
 tok = Tokenizer("../path/to/code.cpp")
 
 entire_token_stream = tok.full_tokenize()
-tokens_per_function = tok.split_functions(False) # Set to True if we only one methods attached to classes
+
+# Set argument to True if we only want methods attached to classes
+tokens_per_function = tok.split_functions(False)
 ```
 
 **Note:** You may need to update the path to the libclang library in tokenizer.py. Obviously, you also need libclang installed.
 
 # Testing
-To run my breif test code in a terminal:
+To run my brief test code in a terminal:
 
 > python tokenizer.py <relative path to C/C++ file>
 
