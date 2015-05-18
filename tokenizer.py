@@ -7,6 +7,7 @@ Created on Mon Mar 30 08:37:12 2015
 
 import clang.cindex
 import clang.enumerations
+import csv
 
 # set the config
 clang.cindex.Config.set_library_path("/usr/lib/x86_64-linux-gnu")
@@ -20,7 +21,7 @@ class Tokenizer:
     
     # To output for split_functions, must have same path up to last two folders
     def extract_path(self, path):
-        return path.split("/")[:-2]
+        return "".join(path.split("/")[:-2])
 
     # does futher processing on a literal token  
     def process_literal(self, literal):
@@ -53,7 +54,7 @@ class Tokenizer:
         spelling = punctuation.spelling
         
         # ignore certain characters
-        if spelling in ["{", "}", "(",")",";", ","]:
+        if spelling in ["{", "}","(",")",";"]:
             return None
             
         return [spelling]
@@ -61,7 +62,7 @@ class Tokenizer:
     # further processes and identifier token    
     def process_ident(self, ident):
         # are we a "special" ident?
-        if ident.spelling in ["std", "cout", "cin", "vector", "string", "NULL"]:
+        if ident.spelling in ["std", "cout", "cin", "vector", "pair", "string", "NULL", "size_t"]:
             return [ident.spelling]
     
         # are we a declaration?
@@ -135,15 +136,27 @@ class Tokenizer:
                 filename = filename.split("/")[-1]
                 results += [(name,tokens,filename)]
                 
-        # reorder methods by number of tokens in each (shortest first)
-        results.sort(lambda x,y: len(x[1]) - len(y[1]))
-                
         return results
-        
-    # given a processed token stream (from this module), compresses each token to a single character
-    def compress_tokens(self, tokens):
-        # TODO
-        return None
+
+# read in and process the CSV file (once)
+token_map = {}
+handle = open("token_map.csv", "r")
+csv_reader = csv.reader(handle)
+for row in csv_reader:
+    token_map[row[0]] = chr(int(row[1]))
+
+# attempts to reduce each token to a single character
+def compress_tokens(tokens):
+    result = ""
+    
+    for token in tokens:
+        if token in token_map:
+            result += token_map[token]
+        else:
+            print "UNMAPPED TOKEN: {}".format(token)
+            result += token
+    
+    return result
         
 if __name__ == "__main__":
     # testing function
@@ -157,5 +170,6 @@ if __name__ == "__main__":
     results = tok.split_functions(False)
     for res in results:
         print res[0] + " (" + res[2] + "):"
-        print res[1]
+        print "Tokens: {}".format(res[1])
+        print "Comprssed Tokens: {}".format(compress_tokens(res[1]))
         print ""

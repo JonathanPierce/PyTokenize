@@ -20,6 +20,9 @@ tokens_per_function = tok.split_functions(False)
 # Testing
 To run my brief test code in a terminal:
 
-> python tokenizer.py <relative path to C/C++ file>
+> python tokenizer.py ../relative/path/to/code/file.cpp
 
 This will use the library's split_functions functionality to print out a list of functions and their tokenizations.
+
+# Further Notes
+This library has been custumoized for use in cheating detection applications. It should be pretty simple to un-customize it.
