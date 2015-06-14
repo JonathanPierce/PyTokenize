@@ -25,4 +25,4 @@ To run my brief test code in a terminal:
 This will use the library's split_functions functionality to print out a list of functions and their tokenizations.
 
 # Further Notes
-This library has been custumoized for use in cheating detection applications. It should be pretty simple to un-customize it.
+This library has been customized for use in cheating detection applications. It should be pretty simple to un-customize it.
