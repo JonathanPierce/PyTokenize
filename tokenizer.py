@@ -147,16 +147,16 @@ for row in csv_reader:
 
 # attempts to reduce each token to a single character
 def compress_tokens(tokens):
-    result = ""
+    result = []
     
     for token in tokens:
         if token in token_map:
-            result += token_map[token]
+            result.append(token_map[token])
         else:
             print "UNMAPPED TOKEN: {}".format(token)
-            result += token
+            result.append(token)
     
-    return result
+    return "".join(result)
         
 if __name__ == "__main__":
     # testing function
@@ -171,5 +171,5 @@ if __name__ == "__main__":
     for res in results:
         print res[0] + " (" + res[2] + "):"
         print "Tokens: {}".format(res[1])
-        print "Comprssed Tokens: {}".format(compress_tokens(res[1]))
+        print "Compressed Tokens: {}".format(compress_tokens(res[1]))
         print ""
